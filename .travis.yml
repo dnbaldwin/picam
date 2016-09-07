@@ -1,0 +1,12 @@
+language: python
+python: "3.5"
+env:
+  - TOXENV=py35
+
+addons:
+  apt:
+    packages:
+    - pandoc
+install: pip install tox
+script: tox
+after_failure: cat .tox/log/tox-*.log
