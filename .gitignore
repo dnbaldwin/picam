@@ -51,3 +51,4 @@ config.cfg
 picam-motiondetect.ini
 picam-motiondetect.cfg
 .cache/
+dbox_sync.ini
