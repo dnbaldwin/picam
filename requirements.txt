@@ -1,2 +1,2 @@
 numpy==1.11.1
-picamera==1.12
+picamera[array]==1.12
