@@ -1,0 +1,9 @@
+# /etc/systemd/system/convert_h264.service
+[Unit]
+Description=convert_h264.service
+
+[Service]
+Type=simple
+ExecStart=/bin/bash -c 'for infile in /opt/picam/*.h264; do /usr/bin/avconv -i "${infile}" -acodec copy -vcodec copy "${infile%\.h264}.mp4"; done'
+Restart=on-failure
+RestartSec=60

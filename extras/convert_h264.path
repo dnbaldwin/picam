@@ -1,0 +1,9 @@
+# /etc/systemd/system/convert_h264.path
+[Unit]
+Description=convert_h264.path
+
+[Path]
+PathExistsGlob=/opt/picam/*.mp4
+
+[Install]
+WantedBy=multi-user.target
