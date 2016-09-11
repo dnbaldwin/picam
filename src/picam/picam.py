@@ -24,7 +24,7 @@ logger_name = "{} :: {}".format(__file__, __name__)
 logger = logging.getLogger(logger_name)
 
 class DetectMotion(picamera.array.PiMotionAnalysis):
-    def __init__(self, *args, motion_timeout=5, motion_magnitude=30, motion_vector_count=10, **kwargs):
+    def __init__(self, *args, motion_timeout=5, motion_magnitude=30, motion_vector_count=20, **kwargs):
         self.motion_magnitude = motion_magnitude
         self.motion_vector_count = motion_vector_count
         self.motion_detected = False
