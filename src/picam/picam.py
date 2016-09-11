@@ -69,7 +69,7 @@ def write_video(stream, ts):
     # lock the stream here as we're definitely not writing to it
     # simultaneously
     logger.debug("Writing video")
-    with io.open('{}.h264'.format(ts), 'wb') as output:
+    with io.open('{}.h264-tmp'.format(ts), 'wb') as output:
         for frame in stream.frames:
             if frame.frame_type == picamera.PiVideoFrameType.sps_header:
                 stream.seek(frame.position)
@@ -85,9 +85,10 @@ def write_video(stream, ts):
 
 
 def concat_vids(ts):
-    with open('{}.h264'.format(ts), 'ab') as before, open('after.h264', 'rb') as after:
+    with open('{}.h264-tmp'.format(ts), 'ab') as before, open('after-tmp.h264', 'rb') as after:
         before.write(after.read())
-    os.remove('after.h264')
+    os.remove('after-tmp.h264')
+    os.rename('{}.h264-tmp'.format(ts), 'capture/{}.h264'.format(ts))
 
 
 def convert_video(ts):
@@ -127,7 +128,7 @@ def main(motion_size=(640, 480), flip=False, convert_vids=False, circular_secs=5
                     camera.wait_recording(0, splitter_port=2)
                     if output.motion_detected:
                         logger.info("Motion detected, splitting image")
-                        camera.split_recording("after.h264")
+                        camera.split_recording("after.h264-tmp")
                         ts = "{:%Y-%m-%d-%H%M%S}".format(datetime.datetime.now())
                         write_video(stream, ts)
                         while output.motion_detected:
