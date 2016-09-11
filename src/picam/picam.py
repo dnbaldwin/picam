@@ -27,7 +27,9 @@ class DetectMotion(picamera.array.PiMotionAnalysis):
     def __init__(self, *args, motion_timeout=5, motion_magnitude=30, motion_vector_count=20, **kwargs):
         self.motion_magnitude = motion_magnitude
         self.motion_vector_count = motion_vector_count
+
         self.motion_detected = False
+        self.latest_motion = 0
         self.motion_timeout = motion_timeout
 
         super().__init__(*args, **kwargs)
@@ -52,10 +54,12 @@ class DetectMotion(picamera.array.PiMotionAnalysis):
 
         # If more than `motion_vector_count` vector have a magnitude greater
         # than `motion_magnitude`, then motion is detected
+
         if (a > self.motion_magnitude).sum() > self.motion_vector_count:
             logger.debug("Found motion, resetting latest timestamp")
-            self.motion_detected = ts
-        elif self.motion_detected and (ts - self.motion_detected) > self.motion_timeout:
+            self.latest_motion = ts
+            self.motion_detected = True
+        elif self.motion_detected and (ts - self.latest_motion) > self.motion_timeout:
             logger.debug("No motion for {} seconds, resetting motion detection".format(self.motion_timeout))
             self.motion_detected = False
 
@@ -132,8 +136,10 @@ def main(motion_size=(640, 480), flip=False, convert_vids=False, circular_secs=5
                             camera.wait_recording(still_img_interval)
                         camera.split_recording(stream)
                         concat_vids(ts)
-                        if convert_vids:
-                            convert_video(ts)
+
+                    # Wiat for period of time with no motion to do video conversion
+                    elif convert_vids and (time.time() - output.latest_motion) > convert_vids:
+                        convert_video(ts)
 
             except KeyboardInterrupt:
                 pass
