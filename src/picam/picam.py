@@ -104,7 +104,7 @@ def gen_img_name():
     counter = 0
     while True:
         counter += 1
-        yield "{:%Y-%m-%d-%H%M%S}-{:03d}.jpg".format(datetime.datetime.now(), counter)
+        yield "capture/{:%Y-%m-%d-%H%M%S}-{:03d}.jpg".format(datetime.datetime.now(), counter)
 
 
 def main(motion_size=(640, 480), flip=False, convert_vids=False, circular_secs=5, still_img_interval=0.25):
