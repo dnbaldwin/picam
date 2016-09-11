@@ -152,4 +152,4 @@ def main(motion_size=(640, 480), flip=False, convert_vids=False, circular_secs=5
 
 
 if __name__ == "__main__":
-    main(flip=True, convert_vids=True)
+    main(flip=True, convert_vids=300)
