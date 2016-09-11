@@ -75,3 +75,7 @@ dist: clean docs
 
 venv:
 	$(PYTHON) -m venv venv
+	venv/bin/python -m pip install --upgrade pip wheel
+
+clean-files:
+	$(RM) *.jpg *.mp4 *.m4v *.h264
